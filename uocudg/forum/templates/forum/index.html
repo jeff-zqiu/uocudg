@@ -1,0 +1,10 @@
+<p><a href="{% url 'forum:new'%}">New Post</a></p>
+{% if latest_post_list %}
+    <ul>
+    {% for post in latest_post_list %}
+        <li><a href="{% url 'forum:content' post.id%}">{{ post.title }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No posts are available.</p>
+{% endif %}
