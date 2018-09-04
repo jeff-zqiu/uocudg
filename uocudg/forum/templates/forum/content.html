@@ -9,7 +9,7 @@
 {% if list_of_comments %}
     <ul>
     {% for comment in list_of_comments %}
-        <li>{{ comment.name }} : {{ comment.content }}</li>
+        <li>{{ comment.name.username }} : {{ comment.content }}</li>
     {% endfor %}
     </ul>
 {% else %}

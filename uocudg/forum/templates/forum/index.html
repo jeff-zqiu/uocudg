@@ -1,4 +1,15 @@
 <p><a href="{% url 'forum:new'%}">New Post</a></p>
+
+{% comment %}hj3
+{% if user_in_session %}
+    <p><a href="{% url 'forum:user'%}">{{ user_in_session.username }}</a></p>
+    <p><a href="{% url 'forum:logout_session'%}">Log out</a></p>
+{% else %}
+    <p><a href="{% url 'forum:sign_in'%}">Sign in</a></p>
+    <p><a href="{% url 'forum:sign_up'%}">Sign up</a></p>
+{% endif %}
+{% endcomment %}
+
 {% if latest_post_list %}
     <ul>
     {% for post in latest_post_list %}
