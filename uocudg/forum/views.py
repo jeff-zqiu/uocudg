@@ -3,9 +3,9 @@ from django.views import View
 from django.views.generic.base import TemplateView, RedirectView
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post, Comments, defualt_user, User
-from .form import PostForm, CommentForm
-from django.contrib.auth import authenticate, login, logout
-
+from .form import PostForm, CommentForm, SignupForm, AuthenticatinoForm
+#from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import views as auth_views
 from warnings import warn
 
 # TODO: implement user session, sign in/up logout and stuff
@@ -21,23 +21,25 @@ View Method Flow Chart:
     https://docs.djangoproject.com/en/2.1/ref/class-based-views/base/
 """""
 
-class IndexView(TemplateView):
+class IndexView(View):
 
     template_name = "forum/index.html"
 
-    def get_context_data(self, **kwargs):
-        # **kwargs is context variable from template
-        context = super().get_context_data(**kwargs)
-        context['latest_post_list'] = Post.objects.order_by('-date')
-        return context
+    def get(self, request):
+        latest_post_list = Post.objects.order_by('-date')
+        user = request.user
+        context = {
+            'user':user,
+            'latest_post_list': latest_post_list,
+        }
+        return render(request, self.template_name, context)
 
 
-class PostFormView(View):
+class EditView(View):
     # TODO: is this the best way to pass class variables?
-    def __init__(self):
-        self.form_class = PostForm
-        self.template_name = 'forum/edit.html'
-        self.action = '/forum/edit/'
+    form_class = PostForm
+    template_name = 'forum/edit.html'
+    action = '/forum/edit/'
 
     def get_post_data(self, post_id):
         if post_id:
@@ -66,7 +68,9 @@ class PostFormView(View):
                 self.current_post.content = data['content']
                 self.current_post.save()
             else:
-                Post.objects.create(title=data['title'], content=data['content'], author=defualt_user)
+                Post.objects.create(title=data['title'],
+                                    content=data['content'],
+                                    author=request.user)
             return HttpResponseRedirect('/forum/')
 
 
@@ -81,12 +85,14 @@ class ContentView(TemplateView):
     template_name = 'forum/content.html'
 
     def get_context_data(self, post_id=0, **kwargs):
+        # **kwargs is context variable from template
         context = super().get_context_data(**kwargs)
         this_post = get_object_or_404(Post, pk=post_id)
         context['list_of_comments'] = Comments.objects.filter(post = this_post)
         context['form'] = CommentForm()
         context['post'] = this_post
         return context
+
 
 class CommentView(View):
     def post(self, request, post_id, comment_id=0):
@@ -101,28 +107,72 @@ class CommentView(View):
             Comments.objects.create(content=data['content'],
                                     parent_comment=replay_to,
                                     post=comment_post,
-                                    name=defualt_user)
+                                    name=request.user)
         return HttpResponseRedirect('/forum/' + str(post_id) + '/')
 
 
-
-def user(request):
+class UserView(View):
     pass
 
-def user_login(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
+
+class SignUpView(View):
+    form_class = SignupForm
+    template_name = 'forum/signup.html'
+
+    def get(self, request):
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
+
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            User.objects.create_user(
+                data['username'],
+                data['email'],
+                data['password']
+            )
         return HttpResponseRedirect('/forum/')
-    else:
-        return HttpResponse('invalid login')
 
-def user_logout(request):
-    logout(request)
-    return HttpResponse("You're logged out.")
 
-def user_sign_up(request):
+
+
+class LoginView(auth_views.LoginView):
+    # template_name = 'forum/login.html'
+    # form = AuthenticatinoForm
+    #
+    # def get(self, request):
+    #     return render(request, self.template_name, {'form':self.form})
+    #
+    # def post(self, request):
+    #     request.session.user =
     pass
+
+
+
+class LogoutView(auth_views.LogoutView):
+    pass
+
+
+
+
+# def user(request):
+#     pass
+#
+# def user_login(request):
+#     username = request.POST['username']
+#     password = request.POST['password']
+#     user = authenticate(request, username=username, password=password)
+#     if user is not None:
+#         login(request, user)
+#         return HttpResponseRedirect('/forum/')
+#     else:
+#         return HttpResponse('invalid login')
+#
+# def user_logout(request):
+#     logout(request)
+#     return HttpResponse("You're logged out.")
+#
+# def user_sign_up(request):
+#     pass
 
