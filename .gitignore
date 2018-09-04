@@ -1,5 +1,4 @@
 .DS_Store
-.idea/misc.xml
-.idea/modules.xml
-.idea/uocudg.iml
-.idea/workspace.xml
+.idea
+uocudg/forum/__pycache__
+uocudg/uocudg/__pycache__
