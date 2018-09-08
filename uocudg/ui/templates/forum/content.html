@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+
+
 <h1>{{ post.title }}</h1>
 <p><a href="{% url 'forum:edit' post.id %}">Edit</a></p>
 <p>{{ post.content }}</p>
@@ -6,6 +10,7 @@
     {{ form }}
     <input type="submit" value="Submit">
 </form>
+
 {% if list_of_comments %}
     <ul>
     {% for comment in list_of_comments %}
@@ -15,3 +20,5 @@
 {% else %}
     <p>Be the first one to comment!</p>
 {% endif %}
+
+{% endblock %}

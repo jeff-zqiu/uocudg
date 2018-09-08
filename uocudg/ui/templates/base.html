@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Secret</title>
+  </head>
+
+  <body>
+    <div id="header">
+      {% block header %}
+        <p>
+          <a href="{% url 'forum:index' %}">Forum</a>
+        </p>
+        {% if user.is_authenticated %}
+          <p>
+            Welcome, {{ user.username }}
+            <a href="{% url 'forum:logout'%}">Log out</a>
+          </p>
+        {% else %}
+          <p>
+            <a href="{% url 'forum:login'%}">Login</a>
+            <a href="{% url 'forum:sign_up'%}">Sign up</a>
+          </p>
+        {% endif %}
+      {% endblock %}
+    </div>
+
+    <div id="content">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
