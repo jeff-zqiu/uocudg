@@ -6,9 +6,10 @@ from .models import Post, Comments, defualt_user, User
 from .form import PostForm, CommentForm, SignupForm, AuthenticatinoForm
 #from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.mixins import LoginRequiredMixin
 from warnings import warn
 
-# TODO: implement user session, sign in/up logout and stuff
+# TODO: implement password change/reset page
 
 """""
 View Method Flow Chart:
@@ -28,6 +29,9 @@ class IndexView(View):
     def get(self, request):
         latest_post_list = Post.objects.order_by('-date')
         user = request.user
+        if not user.is_authenticated:
+            # todo: add anonymous user instance (random ID, delete instance when session ends)
+            pass
         context = {
             'user':user,
             'latest_post_list': latest_post_list,
@@ -35,8 +39,13 @@ class IndexView(View):
         return render(request, self.template_name, context)
 
 
-class EditView(View):
+class EditView(LoginRequiredMixin, View):
     # TODO: is this the best way to pass class variables?
+
+    # parameter from LoginRequiredMixin to redirect to login page
+    login_url = '/forum/login/'
+
+    # class variables
     form_class = PostForm
     template_name = 'forum/edit.html'
     action = '/forum/edit/'
@@ -175,4 +184,5 @@ class LogoutView(auth_views.LogoutView):
 #
 # def user_sign_up(request):
 #     pass
+
 

@@ -27,4 +27,3 @@ class Comments(models.Model):
         return self.name.username + ' : ' + str(self.content)[:20]
 
 
-
