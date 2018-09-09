@@ -1,14 +1,26 @@
 {% extends "base.html" %}
 
 {% block content %}
-<p><a href="{% url 'forum:new'%}">New Post</a></p>
 
-  {% if latest_post_list %}
-      <ul>
-      {% for post in latest_post_list %}
-          <li><a href="{% url 'forum:content' post.id%}">{{ post.title }}</a></li>
-      {% endfor %}
-      </ul>
+{% if latest_post_list %}
+{% for post in latest_post_list %}
+<div class="card" style="width: 24%;">
+  <!-- <img class="card-img-top" src=".../100px180/?text=Image cap" alt="Card image cap"> -->
+  <div class="card-body">
+    <h5 class="card-title">{{ post.title }}</h5>
+    <p class="card-text">{{ post.content }}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item">Comment 1</li>
+    <li class="list-group-item">Comment 2</li>
+  </ul>
+  <div class="card-body">
+    <a href="#" class="card-link">Click</a>
+    <a href="#" class="card-link">Comment</a>
+    <a href="#" class="card-link">Tag</a>
+  </div>
+</div>
+{% endfor %}
   {% else %}
       <p>No posts are available.</p>
   {% endif %}
