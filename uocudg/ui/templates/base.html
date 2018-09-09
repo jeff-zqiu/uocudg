@@ -1,0 +1,101 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Secret</title>
+    <link rel="stylesheet" href="{% static "bootstrap.min.css" %}">
+    <script src="{% static "base.js" %}"></script>
+  </head>
+
+  <body>
+    <div class="container-fluid">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="{% url 'forum:index' %}">Forum</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+<!--
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item">
+              <a class="nav-link" href="#">Link</a>
+            </li>
+    -->
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#">Top</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#">New</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link disabled" href="#">Controversial</a>
+    </li>
+    <!--
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Forum
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Top</a>
+              <a class="dropdown-item" href="#">Hot</a>
+               <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">New</a>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Disabled</a>
+          </li>
+          -->
+        </ul>
+        <div class="user-auth-container">
+          <a href="{% url 'forum:new'%}">New Post</a>
+          {% if user.is_authenticated %}
+            {{ user.username }}
+            <a href="{% url 'forum:logout'%}">Log out</a>
+          {% else %}
+            <a href="{% url 'forum:login'%}">Login</a>
+            <a href="{% url 'forum:sign_up'%}">Sign up</a>
+          {% endif %}
+        </div>
+      <!--
+
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  -->
+      </div>
+    </nav>
+
+<!--
+      <div class="logo">
+        <p><a href="{% url 'forum:index' %}">Forum</a></p>
+      </div>
+      <div class="user-auth-container">
+        {% if user.is_authenticated %}
+        <p>
+          {{ user.username }}
+          <a href="{% url 'forum:logout'%}">Log out</a>
+        </p>
+        {% else %}
+        <p>
+          <a href="{% url 'forum:login'%}">Login</a>
+          <a href="{% url 'forum:sign_up'%}">Sign up</a>
+        </p>
+        {% endif %}
+      </div>
+    </div>
+-->
+
+    <div class="container-fluid" style="width: 72%">
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>

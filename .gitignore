@@ -1,5 +1,7 @@
 .DS_Store
 .idea
-uocudg/forum/__pycache__
-uocudg/uocudg/__pycache__
-uocudg/uocudg/forum/templates/.DS_Store
+__pycache__/
+uocudg/ui/node_modules/
+uocudg/ui/package-lock.json
+
+

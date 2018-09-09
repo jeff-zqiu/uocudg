@@ -1,6 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
 <p><a href="{% url 'forum:delete' post_id %}">Delete</a></p>
 <form action="{{ action }}" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit">
 </form>
+
+{% endblock %}
