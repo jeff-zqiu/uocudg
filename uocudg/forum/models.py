@@ -14,6 +14,10 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    @classmethod
+    def get_next_title(self):
+        return 'Secret #'+str(Post.objects.last().id+1)
+
 class Comments(models.Model):
     name = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(default=timezone.now)

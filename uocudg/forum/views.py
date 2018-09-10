@@ -26,9 +26,15 @@ class IndexView(View):
 
     template_name = "forum/index.html"
 
+
     def get(self, request):
-        latest_post_list = Post.objects.order_by('-date')
         user = request.user
+
+        latest_post_list = Post.objects.order_by('-date')[:21]
+        for this_post in latest_post_list:
+            this_post.comment_snaps = Comments.objects.filter(post = this_post)[:3]
+
+
         if not user.is_authenticated:
             # todo: add anonymous user instance (random ID, delete instance when session ends)
             pass
@@ -73,11 +79,11 @@ class EditView(LoginRequiredMixin, View):
             data = form.cleaned_data
             if post_id:
                 warn("updating form!")
-                self.current_post.title=data['title']
+                #self.current_post.title=data['title']
                 self.current_post.content = data['content']
                 self.current_post.save()
             else:
-                Post.objects.create(title=data['title'],
+                Post.objects.create(title=Post.get_next_title(),
                                     content=data['content'],
                                     author=request.user)
             return HttpResponseRedirect('/forum/')

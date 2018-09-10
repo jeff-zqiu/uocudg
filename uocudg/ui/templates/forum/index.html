@@ -3,24 +3,31 @@
 {% block content %}
 
 {% if latest_post_list %}
-{% for post in latest_post_list %}
-<div class="card" style="width: 24%;">
-  <!-- <img class="card-img-top" src=".../100px180/?text=Image cap" alt="Card image cap"> -->
-  <div class="card-body">
-    <h5 class="card-title">{{ post.title }}</h5>
-    <p class="card-text">{{ post.content }}</p>
+
+
+<div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 1 }'>
+
+  {% for post in latest_post_list %}
+  <div class="card my-2 mx-2 grid-item" style="width: 30%;">
+    <!-- <img class="card-img-top" src=".../100px180/?text=Image cap" alt="Card image cap"> -->
+    <div class="card-body">
+      <h5 class="card-title"><a href="{% url 'forum:content' post.id %}">{{ post.title }}</a></h5>
+      <p class="card-text" style="max-height: 300px; overflow: scroll;">{{ post.content }}</p>
+    </div>
+    <ul class="list-group list-group-flush">
+      {% for comment_snippet in post.comment_snaps %}
+      <li class="list-group-item">{{comment_snippet}}</li>
+      {% endfor %}
+    </ul>
+    <div class="card-body">
+      <a href="#" class="card-link">Click</a>
+      <a href="#" class="card-link">Comment</a>
+      <a href="#" class="card-link">Tag</a>
+    </div>
   </div>
-  <ul class="list-group list-group-flush">
-    <li class="list-group-item">Comment 1</li>
-    <li class="list-group-item">Comment 2</li>
-  </ul>
-  <div class="card-body">
-    <a href="#" class="card-link">Click</a>
-    <a href="#" class="card-link">Comment</a>
-    <a href="#" class="card-link">Tag</a>
-  </div>
+  {% endfor %}
+
 </div>
-{% endfor %}
   {% else %}
       <p>No posts are available.</p>
   {% endif %}
