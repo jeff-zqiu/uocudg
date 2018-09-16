@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from .models import Post, Comments, User
 from .form import PostForm, CommentForm, SignupForm, AuthenticatinoForm
 from django.contrib.auth import views as auth_views
+from warnings import warn
 
 
 # TODO: implement password change/reset page
@@ -22,10 +23,6 @@ View Method Flow Chart:
 """""
 
 class View(BaseView):
-    def __init__(self):
-        self.index_post = Post.objects.order_by('-date')[:21]
-        for this_post in self.index_post:
-            this_post.comment_snaps = Comments.objects.filter(post = this_post)[:3]
 
     def get_user(self, request):
         if request.user.is_authenticated:
@@ -38,7 +35,9 @@ class IndexView(View):
 
     def get(self, request):
         user = request.user
-
+        self.index_post = Post.objects.order_by('-date')[:21]
+        for this_post in self.index_post:
+            this_post.comment_snaps = Comments.objects.filter(post=this_post)[:3]
         # if not user.is_authenticated:
         #     pass
         context = {
@@ -49,11 +48,10 @@ class IndexView(View):
 
 
 
-class EditView(IndexView):
+class EditView(View):
     # parameter from LoginRequiredMixin to redirect to login page
     #login_url = '/forum/login/'
 
-    # class variables
     form_class = PostForm
     template_name = 'forum/edit.html'
     action = '/forum/edit/'
@@ -83,9 +81,9 @@ class EditView(IndexView):
         form = self.form_class(initial)
         return render(request, self.template_name,
                       {
+                        'action' : self.action,
                         'form': form,
                         'post_id': post_id,
-                        'latest_post_list': self.index_post,
                       })
 
     def post(self, request, post_id=0):
@@ -113,7 +111,6 @@ def delete(request, post_id):
 
 class ContentView(View):
     template_name = 'forum/content.html'
-
 
     def get(self, request, post_id=0):
         this_post = get_object_or_404(Post, pk=post_id)
@@ -170,14 +167,6 @@ class SignUpView(View):
 
 
 class LoginView(auth_views.LoginView):
-    # template_name = 'forum/login.html'
-    # form = AuthenticatinoForm
-    #
-    # def get(self, request):
-    #     return render(request, self.template_name, {'form':self.form})
-    #
-    # def post(self, request):
-    #     request.session.user =
     pass
 
 

@@ -1,0 +1,56 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Secret</title>
+  <link rel="stylesheet" href="{% static "bootstrap.min.css" %}">
+  <link rel="stylesheet" href="{% static "base.css" %}">
+  <script src="{% static "masonry.pkgd.min.js" %}"></script>
+  <script src="{% static "jquery-3.1.0.min.js"%}"></script>
+  <script src="{% static "base.js" %}"></script>
+</head>
+
+<body>
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="{% url 'forum:index' %}">Secrets</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Top</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">New</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link disabled" href="#">Controversial</a>
+          </li>
+
+        </ul>
+        <div class="user-auth-container">
+          <a class='new-post'>New Post</a>
+          {% if user.is_authenticated %}
+          {{ user.username }}
+          <a href="{% url 'forum:logout'%}">Log out</a>
+          {% else %}
+          <a href="{% url 'forum:login'%}">Login</a>
+          <a href="{% url 'forum:sign_up'%}">Sign up</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+{% block content %}
+{% endblock %}
+
+</body>
+
+</html>

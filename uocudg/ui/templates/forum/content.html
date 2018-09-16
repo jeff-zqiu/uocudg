@@ -1,15 +1,14 @@
 {% load widget_tweaks %}
 
 <div class="block-container d-flex justify-content-center">
-  <div class="card my-2 mx-2 content-card" style="width: 50%;">
-    <div class="card-body">
+  <div class="card my-2 mx-2 content-card"  style="width: 50%;">
+    <div class="card-body" id="content-card-id">
       <h5 class="card-title">{{ post.title }}</h5>
 
       <p class="card-button-right">
       {% if user.is_superuser %}
       <a href="{% url 'forum:edit' post.id %}">Edit</a>
       {% endif %}
-      <a href="{% url 'forum:index' %}">Back</a>
     </p>
 
       <p class="card-text">{{ post.content }}</p>
