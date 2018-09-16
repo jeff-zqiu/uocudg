@@ -3,5 +3,7 @@
 __pycache__/
 uocudg/ui/node_modules/
 uocudg/ui/package-lock.json
+uocudg/.ipynb_checkpoints/
+uocudg/forum/migrations/__pycache__/
 
 

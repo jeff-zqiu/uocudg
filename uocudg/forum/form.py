@@ -1,12 +1,14 @@
 from django import forms
-from  django.contrib.auth import forms as auth_form
+from django.contrib.auth import forms as auth_form
 
 class PostForm(forms.Form):
-    title = forms.CharField(label='Title', max_length=50)
+    title = forms.CharField(label='Title', max_length=50, required=False)
     content = forms.CharField(label='Content', widget=forms.Textarea)
+    display_name = forms.BooleanField(required=False)
 
 class CommentForm(forms.Form):
     content = forms.CharField(label='Comment', widget=forms.Textarea)
+    display_name = forms.BooleanField(required=False)
 
 class SignupForm(forms.Form):
     # todo: add email authentication and password confirmation

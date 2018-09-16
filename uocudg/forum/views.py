@@ -1,15 +1,14 @@
 from django.shortcuts import render, get_object_or_404
-from django.views import View
-from django.views.generic.base import TemplateView, RedirectView
+from django.views import View as BaseView
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Post, Comments, defualt_user, User
+from .models import Post, Comments, User
 from .form import PostForm, CommentForm, SignupForm, AuthenticatinoForm
-#from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth import views as auth_views
-from django.contrib.auth.mixins import LoginRequiredMixin
-from warnings import warn
+
 
 # TODO: implement password change/reset page
+# todo: reload index post for every view causes performance issue
+
 
 """""
 View Method Flow Chart:
@@ -22,34 +21,37 @@ View Method Flow Chart:
     https://docs.djangoproject.com/en/2.1/ref/class-based-views/base/
 """""
 
+class View(BaseView):
+    def __init__(self):
+        self.index_post = Post.objects.order_by('-date')[:21]
+        for this_post in self.index_post:
+            this_post.comment_snaps = Comments.objects.filter(post = this_post)[:3]
+
+    def get_user(self, request):
+        if request.user.is_authenticated:
+            return request.user
+        else: return User.defualt_user
+
+
 class IndexView(View):
-
     template_name = "forum/index.html"
-
 
     def get(self, request):
         user = request.user
 
-        latest_post_list = Post.objects.order_by('-date')[:21]
-        for this_post in latest_post_list:
-            this_post.comment_snaps = Comments.objects.filter(post = this_post)[:3]
-
-
-        if not user.is_authenticated:
-            # todo: add anonymous user instance (random ID, delete instance when session ends)
-            pass
+        # if not user.is_authenticated:
+        #     pass
         context = {
             'user':user,
-            'latest_post_list': latest_post_list,
+            'latest_post_list': self.index_post,
         }
         return render(request, self.template_name, context)
 
 
-class EditView(LoginRequiredMixin, View):
-    # TODO: is this the best way to pass class variables?
 
+class EditView(IndexView):
     # parameter from LoginRequiredMixin to redirect to login page
-    login_url = '/forum/login/'
+    #login_url = '/forum/login/'
 
     # class variables
     form_class = PostForm
@@ -67,46 +69,60 @@ class EditView(LoginRequiredMixin, View):
         else:
             return {'title':'', 'content':''}
 
+    def get_post_title(self, request, data):
+        if data['title']:
+            title = data['title']
+        elif data['display_name']:
+            title = request.user.username
+        else:
+            title = Post.get_next_title()
+        return title
+
     def get(self, request, post_id=0):
         initial = self.get_post_data(post_id)
         form = self.form_class(initial)
-        return render(request, self.template_name, {'form': form, 'post_id': post_id})
+        return render(request, self.template_name,
+                      {
+                        'form': form,
+                        'post_id': post_id,
+                        'latest_post_list': self.index_post,
+                      })
 
     def post(self, request, post_id=0):
-        initial = self.get_post_data(post_id)
         form = self.form_class(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             if post_id:
-                warn("updating form!")
-                #self.current_post.title=data['title']
+                #todo: attribute error encountered when editing exisitng post
+                if data['title']: self.current_post.title=data['title']
                 self.current_post.content = data['content']
                 self.current_post.save()
             else:
-                Post.objects.create(title=Post.get_next_title(),
+                Post.objects.create(title=self.get_post_title(request, data),
                                     content=data['content'],
-                                    author=request.user)
-            return HttpResponseRedirect('/forum/')
+                                    author=self.get_user(request))
+        return HttpResponseRedirect('/forum/')
 
 
 # function view because fuck it
 def delete(request, post_id):
-    Post.objects.get(pk=post_id).delete()
+    if post_id:
+        Post.objects.get(pk=post_id).delete()
     return HttpResponseRedirect('/forum/')
 
 
-class ContentView(TemplateView):
-    # equivalent to: return render(request, template_name, context)
+class ContentView(View):
     template_name = 'forum/content.html'
 
-    def get_context_data(self, post_id=0, **kwargs):
-        # **kwargs is context variable from template
-        context = super().get_context_data(**kwargs)
+
+    def get(self, request, post_id=0):
         this_post = get_object_or_404(Post, pk=post_id)
-        context['list_of_comments'] = Comments.objects.filter(post = this_post)
-        context['form'] = CommentForm()
-        context['post'] = this_post
-        return context
+        context = {
+            'list_of_comments':Comments.objects.filter(post = this_post),
+            'form': CommentForm(),
+            'post': this_post,
+        }
+        return render(request, self.template_name, context)
 
 
 class CommentView(View):
@@ -118,11 +134,12 @@ class CommentView(View):
         form = CommentForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            # TODO: insert currently logged in user as 'name'
             Comments.objects.create(content=data['content'],
                                     parent_comment=replay_to,
                                     post=comment_post,
-                                    name=request.user)
+                                    author=self.get_user(request),
+                                    display_name=Comments.new_display_name())
+
         return HttpResponseRedirect('/forum/' + str(post_id) + '/')
 
 

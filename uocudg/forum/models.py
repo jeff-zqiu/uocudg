@@ -2,8 +2,6 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
-defualt_user = User.objects.get(pk=2)
-
 
 class Post(models.Model):
     title = models.CharField(max_length=50, default='Untitled')
@@ -18,8 +16,11 @@ class Post(models.Model):
     def get_next_title(self):
         return 'Secret #'+str(Post.objects.last().id+1)
 
+
+
 class Comments(models.Model):
-    name = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    display_name = models.CharField(max_length=50, default='')
     date = models.DateTimeField(default=timezone.now)
     content = models.TextField(default='')
     # if a post gets deleted, the comments will also be deleted (SQL CASCADE DELETE)
@@ -27,7 +28,13 @@ class Comments(models.Model):
     # recursive model relationship
     parent_comment = models.ForeignKey('self', on_delete=models.CASCADE, null=True, blank=True)
 
-    def __str__(self):
-        return self.name.username + ' : ' + str(self.content)[:20]
+    @classmethod
+    def new_display_name(self):
+        return '#'+str(Comments.objects.last().id+1)
 
+    def __str__(self):
+        return self.display_name + ' : ' + str(self.content)[:20]
+
+class User(User):
+    defualt_user = User.objects.get(pk=2)
 

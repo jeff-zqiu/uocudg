@@ -1,24 +1,58 @@
-{% extends 'base.html' %}
-{% block content %}
+{% load widget_tweaks %}
+
+<div class="block-container d-flex justify-content-center">
+  <div class="card my-2 mx-2 content-card" style="width: 50%;">
+    <div class="card-body">
+      <h5 class="card-title">{{ post.title }}</h5>
+
+      <p class="card-button-right">
+      {% if user.is_superuser %}
+      <a href="{% url 'forum:edit' post.id %}">Edit</a>
+      {% endif %}
+      <a href="{% url 'forum:index' %}">Back</a>
+    </p>
+
+      <p class="card-text">{{ post.content }}</p>
 
 
-<h1>{{ post.title }}</h1>
-<p><a href="{% url 'forum:edit' post.id %}">Edit</a></p>
-<p>{{ post.content }}</p>
+      <ul class="list-group list-group-flush">
+        {% if list_of_comments %}
+        {% for comment in list_of_comments %}
+        <li class="list-group-item">
+          {{ comment.display_name }} : {{ comment.content }}
+        </li>
+        {% endfor %}
+        {% else %}
+        <p class="card-text">Be the first one to comment!</p>
+        {% endif %}
+      </ul>
+
+      <div class="card-body">
+        <form action="{% url 'forum:new_comment' post.id %}" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="contentTextArea">Comment</label>
+            {% render_field form.content class="form-control" id="contentTextArea" %}
+            {% if user.is_authenticated %}
+            {% render_field form.display_name class="form-check-input" id="displayNameChoice" style="width: auto"%}
+            <label class="form-check-label" for="displayNameChoice">Use username?</label>
+            {% endif %}
+          </div>
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <!--
 <form action="{% url 'forum:new_comment' post.id %}" method="post">
     {% csrf_token %}
     {{ form }}
     <input type="submit" value="Submit">
 </form>
 
-{% if list_of_comments %}
-    <ul>
-    {% for comment in list_of_comments %}
-        <li>{{ comment.name.username }} : {{ comment.content }}</li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Be the first one to comment!</p>
-{% endif %}
-
-{% endblock %}
+-->
