@@ -98,7 +98,7 @@ class EditView(View):
         if form.is_valid():
             data = form.cleaned_data
             if post_id:
-                #todo: attribute error encountered when editing exisitng post
+                self.current_post = get_object_or_404(Post, pk=post_id)
                 if data['title']: self.current_post.title=data['title']
                 self.current_post.content = data['content']
                 self.current_post.save()

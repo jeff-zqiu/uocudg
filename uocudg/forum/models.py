@@ -8,6 +8,8 @@ class Post(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(default = timezone.now)
     content = models.TextField(default="Whoa such empty")
+    clicks = models.IntegerField(default=0)
+    tags = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title
@@ -36,5 +38,5 @@ class Comments(models.Model):
         return self.display_name + ' : ' + str(self.content)[:20]
 
 class User(User):
-    defualt_user = User.objects.get(pk=2)
+    pass
 
