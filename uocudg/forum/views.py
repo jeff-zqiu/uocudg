@@ -129,27 +129,6 @@ class ContentView(View):
         return render(request, self.template_name, context)
 
 
-def post_new_comment(request, post_id, comment_id=0):
-    template_name = 'forum/content.html'
-    this_post = get_object_or_404(Post, pk=post_id)
-    replay_to = None
-    if comment_id:
-        replay_to = get_object_or_404(Comments, pk=comment_id)
-    form = CommentForm(request.POST)
-    if form.is_valid():
-        data = form.cleaned_data
-        Comments.objects.create(content=data['content'],
-                                parent_comment=replay_to,
-                                post=this_post,
-                                author=get_user(request),
-                                display_name=Comments.new_display_name())
-    context = {
-        'list_of_comments': Comments.objects.filter(post=this_post),
-        'form': CommentForm(),
-        'post': this_post,
-    }
-    return render(request, template_name, context)
-
 class CommentView(View):
     template_name = 'forum/content.html'
 

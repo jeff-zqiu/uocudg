@@ -16,7 +16,7 @@ urlpatterns = [
     path('<int:post_id>/', views.ContentView.as_view() , name='content'),
 
     # /forum/<post_id>/comment/
-    path('<int:post_id>/comment/', views.post_new_comment, name='new_comment'),
+    path('<int:post_id>/comment/', views.CommentView.as_view(), name='new_comment'),
     path('<int:post_id>/comment/<int:comment_id>/', views.CommentView.as_view(), name='comment'),
 
     path('sign_up/', views.SignUpView.as_view(), name='sign_up'),
