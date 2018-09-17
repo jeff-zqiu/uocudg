@@ -1,4 +1,5 @@
 $(document).ready(function() {
+
   $('*').click(function(e) {
     target = e.target;
     if (!$(target).parents().is(".content-card") &&
@@ -10,11 +11,11 @@ $(document).ready(function() {
 
   $(".card-body").click(function() {
     post_url = ["/forum/", $(this).attr('id'), "/"];
-    $("#content-overlay").load(post_url.join(''))
+    $("#content-overlay").load(post_url.join(''));
   });
 
   $("#new-post").click(function() {
-    $("#content-overlay").load("/forum/edit/")
+    $("#content-overlay").load("/forum/edit/");
   });
 
 });

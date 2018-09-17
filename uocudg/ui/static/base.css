@@ -11,14 +11,30 @@
   z-index: 2;
 }
 
-#todo: longboi does not behave correctly
+#content-overlay {
+  top: 10%
+}
 
 .content-card {
-  height: auto;
-  overflow: scroll;
+  max-height: 80%;
   top: 10%;
+  overflow: scroll;
 }
 
-.card-button-right {
-  float: right;
-}
+
+ .index-card {
+   width: 30%;
+   max-width: 400px;
+ }
+
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) { .card {width: 100%;} }
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {  .card {width: 50%;}  }
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {  .card {width: 30%;}  }
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {  .card {width: 30%;}  }

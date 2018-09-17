@@ -1,15 +1,15 @@
 {% load widget_tweaks %}
 
 <div class="block-container d-flex justify-content-center">
-  <div class="card my-2 mx-2 content-card"  style="width: 50%;">
+  <div class="card my-2 mx-2 content-card" style="width: 50%;">
     <div class="card-body" id="content-card-id">
       <h5 class="card-title">{{ post.title }}</h5>
 
       <p class="card-button-right">
-      {% if user.is_superuser %}
-      <a href="{% url 'forum:edit' post.id %}">Edit</a>
-      {% endif %}
-    </p>
+        {% if user.is_superuser %}
+        <a href="{% url 'forum:edit' post.id %}">Edit</a>
+        {% endif %}
+      </p>
 
       <p class="card-text">{{ post.content }}</p>
 
@@ -26,8 +26,32 @@
         {% endif %}
       </ul>
 
+
+      <script>
+        $(".comment-form").submit(function(e) {
+          e.preventDefault();
+          post_url = ["/forum/", $(this).attr('id'), "/"].join('');
+          comment_url = post_url.concat('comment/');
+          $.ajax({
+            url: comment_url,
+            data: {
+              content: $("#contentTextArea").val(),
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            type: "POST",
+            success: function(data) {
+             $("#content-overlay").load(post_url);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+              alert(xhr.status);
+              alert(thrownError);
+            },
+          })
+        });
+      </script>
+
       <div class="card-body">
-        <form action="{% url 'forum:new_comment' post.id %}" method="post">
+        <form class="comment-form" id="{{ post.id }}">
           {% csrf_token %}
           <div class="form-group">
             <label for="contentTextArea">Comment</label>
@@ -37,7 +61,7 @@
             <label class="form-check-label" for="displayNameChoice">Use username?</label>
             {% endif %}
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button class="btn btn-primary" >Submit</button>
         </form>
       </div>
     </div>
@@ -47,7 +71,7 @@
 
 
 
-  <!--
+<!--
 <form action="{% url 'forum:new_comment' post.id %}" method="post">
     {% csrf_token %}
     {{ form }}

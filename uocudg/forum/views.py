@@ -22,6 +22,13 @@ View Method Flow Chart:
     https://docs.djangoproject.com/en/2.1/ref/class-based-views/base/
 """""
 
+
+def get_user(request):
+    if request.user.is_authenticated:
+        return request.user
+    else:
+        return User.defualt_user
+
 class View(BaseView):
 
     def get_user(self, request):
@@ -122,9 +129,32 @@ class ContentView(View):
         return render(request, self.template_name, context)
 
 
+def post_new_comment(request, post_id, comment_id=0):
+    template_name = 'forum/content.html'
+    this_post = get_object_or_404(Post, pk=post_id)
+    replay_to = None
+    if comment_id:
+        replay_to = get_object_or_404(Comments, pk=comment_id)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        data = form.cleaned_data
+        Comments.objects.create(content=data['content'],
+                                parent_comment=replay_to,
+                                post=this_post,
+                                author=get_user(request),
+                                display_name=Comments.new_display_name())
+    context = {
+        'list_of_comments': Comments.objects.filter(post=this_post),
+        'form': CommentForm(),
+        'post': this_post,
+    }
+    return render(request, template_name, context)
+
 class CommentView(View):
+    template_name = 'forum/content.html'
+
     def post(self, request, post_id, comment_id=0):
-        comment_post = get_object_or_404(Post, pk=post_id)
+        this_post = get_object_or_404(Post, pk=post_id)
         replay_to = None
         if comment_id:
             replay_to = get_object_or_404(Comments, pk=comment_id)
@@ -133,11 +163,15 @@ class CommentView(View):
             data = form.cleaned_data
             Comments.objects.create(content=data['content'],
                                     parent_comment=replay_to,
-                                    post=comment_post,
+                                    post=this_post,
                                     author=self.get_user(request),
                                     display_name=Comments.new_display_name())
-
-        return HttpResponseRedirect('/forum/' + str(post_id) + '/')
+        context = {
+            'list_of_comments':Comments.objects.filter(post = this_post),
+            'form': CommentForm(),
+            'post': this_post,
+        }
+        return render(request, self.template_name, context)
 
 
 class UserView(View):

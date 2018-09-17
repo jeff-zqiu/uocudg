@@ -2,12 +2,12 @@
 {% block content %}
 
 <div id="content-overlay"></div>
-<div class="container-fluid" style="width: 72%">
+<div class="container-fluid">
 
   <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 1 }'>
 
     {% for post in latest_post_list %}
-    <div class="card my-2 mx-2 grid-item" style="width: 30%;">
+    <div class="card my-2 mx-2 grid-item index-card">
       <div class="card-body" id="{{ post.id }}">
         <h5 class="card-title">{{ post.title }}</h5>
         <p class="card-text" style="max-height: 300px; overflow: scroll;">{{ post.content }}</p>

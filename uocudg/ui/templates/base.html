@@ -36,7 +36,7 @@
 
         </ul>
         <div class="user-auth-container">
-          <a class='new-post'>New Post</a>
+          <a id="new-post">New Post</a>
           {% if user.is_authenticated %}
           {{ user.username }}
           <a href="{% url 'forum:logout'%}">Log out</a>
