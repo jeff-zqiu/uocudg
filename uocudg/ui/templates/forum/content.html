@@ -2,7 +2,7 @@
 
 <div class="block-container d-flex justify-content-center">
   <div class="card my-2 mx-2 content-card" style="width: 50%;">
-    <div class="card-body" id="content-card-id">
+    <div class="card-body">
       <h5 class="card-title">{{ post.title }}</h5>
 
       <p class="card-button-right">
@@ -28,6 +28,7 @@
 
 
       <script>
+      $(document).ready(function() {
         $(".comment-form").submit(function(e) {
           e.preventDefault();
           post_url = ["/forum/", $(this).attr('id'), "/"].join('');
@@ -48,6 +49,7 @@
             },
           })
         });
+      });
       </script>
 
       <div class="card-body">

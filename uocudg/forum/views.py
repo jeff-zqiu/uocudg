@@ -1,40 +1,21 @@
 from django.shortcuts import render, get_object_or_404
 from django.views import View as BaseView
-from django.http import HttpResponse, HttpResponseRedirect
-from .models import Post, Comments, User
-from .form import PostForm, CommentForm, SignupForm, AuthenticatinoForm
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from .models import *
+from .form import *
 from django.contrib.auth import views as auth_views
 from warnings import warn
 
 
 # TODO: implement password change/reset page
-# todo: reload index post for every view causes performance issue
 
-
-"""""
-View Method Flow Chart:
-    dispatch(): accepts a request argument plus arguments, and returns a HTTP response.
-    http_method_not_allowed(): If the view was called with a HTTP method it doesn’t support, 
-                                this method is called instead.
-    (TemplateView) get_context_data(): Returns a dictionary representing the template context.
-    (RedirectView) get_redirect_url(): Constructs the target URL for redirection.
-
-    https://docs.djangoproject.com/en/2.1/ref/class-based-views/base/
-"""""
-
-
-def get_user(request):
-    if request.user.is_authenticated:
-        return request.user
-    else:
-        return User.defualt_user
 
 class View(BaseView):
 
     def get_user(self, request):
         if request.user.is_authenticated:
             return request.user
-        else: return User.defualt_user
+        else: return User.profile.defualt_user
 
 
 class IndexView(View):
@@ -109,11 +90,38 @@ class EditView(View):
         return HttpResponseRedirect('/forum/')
 
 
-# function view because fuck it
 def delete(request, post_id):
     if post_id:
         Post.objects.get(pk=post_id).delete()
     return HttpResponseRedirect('/forum/')
+
+def clickup(request, post_id):
+    def check_clicked(post_id, user):
+        clicked_list = user.user.profile.clicked.split()
+        if post_id in clicked_list:
+            clicked_list.remove(post_id)
+            user.clicked = ' '.join(clicked_list)
+            user.save()
+            return True
+        else:
+            clicked_list.append(post_id)
+            user.clicked = ' '.join(clicked_list)
+            user.save()
+            return False
+
+    this_post = Post.objects.get(pk=post_id)
+    warn(type(request.user))
+    if request.user.is_authenticated and not request.user.is_superuser:
+        if check_clicked(post_id, request.user):
+            this_post.clicks-=1
+            this_post.save()
+            return JsonResponse({'clicks' : this_post.clicks, 'clicked' : 'false'})
+        this_post.clicks+=1
+        this_post.save()
+        return JsonResponse({'clicks' : this_post.clicks, 'clicked' : 'true'})
+
+    else: return JsonResponse({'clicks' : this_post.clicks, 'clicked' : 'false'})
+
 
 
 class ContentView(View):
@@ -144,7 +152,7 @@ class CommentView(View):
                                     parent_comment=replay_to,
                                     post=this_post,
                                     author=self.get_user(request),
-                                    display_name=Comments.new_display_name())
+                                    display_name=Comments.new_display_name(request, data))
         context = {
             'list_of_comments':Comments.objects.filter(post = this_post),
             'form': CommentForm(),
@@ -169,7 +177,7 @@ class SignUpView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            User.objects.create_user(
+            User.create_user(
                 data['username'],
                 data['email'],
                 data['password']
@@ -187,27 +195,5 @@ class LoginView(auth_views.LoginView):
 class LogoutView(auth_views.LogoutView):
     pass
 
-
-
-
-# def user(request):
-#     pass
-#
-# def user_login(request):
-#     username = request.POST['username']
-#     password = request.POST['password']
-#     user = authenticate(request, username=username, password=password)
-#     if user is not None:
-#         login(request, user)
-#         return HttpResponseRedirect('/forum/')
-#     else:
-#         return HttpResponse('invalid login')
-#
-# def user_logout(request):
-#     logout(request)
-#     return HttpResponse("You're logged out.")
-#
-# def user_sign_up(request):
-#     pass
 
 

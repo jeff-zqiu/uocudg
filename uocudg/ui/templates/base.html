@@ -28,15 +28,15 @@
             <a class="nav-link disabled" href="#">Top</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">New</a>
+            <a class="nav-link disabled" href="#">Hot</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link disabled" href="#">Controversial</a>
+            <a class="nav-link disabled" href="#">About</a>
           </li>
 
         </ul>
         <div class="user-auth-container">
-          <a id="new-post">New Post</a>
+          <a class="new-post-ajax">New Post</a>
           {% if user.is_authenticated %}
           {{ user.username }}
           <a href="{% url 'forum:logout'%}">Log out</a>

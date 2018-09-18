@@ -1,6 +1,28 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<script>
+$(document).ready(function() {
+  $(".clickup-ajax").click(function(e) {
+    e.preventDefault();
+    post_id = $(this).attr('id');
+    click_url=["/forum/", post_id, "/clickup/"].join('');
+    selector = ['#',post_id,'.clickup-ajax'].join('');
+    $.ajax({
+      url: click_url,
+      success: function(data) {
+        string = [data['clicks'], ' Click'].join('');
+        $(selector).html(string);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        alert(xhr.status);
+        alert(thrownError);
+      },
+    })
+  });
+});
+</script>
+
 <div id="content-overlay"></div>
 <div class="container-fluid">
 
@@ -8,7 +30,7 @@
 
     {% for post in latest_post_list %}
     <div class="card my-2 mx-2 grid-item index-card">
-      <div class="card-body" id="{{ post.id }}">
+      <div class="card-body card-body-ajax" id="{{ post.id }}">
         <h5 class="card-title">{{ post.title }}</h5>
         <p class="card-text" style="max-height: 300px; overflow: scroll;">{{ post.content }}</p>
       </div>
@@ -18,9 +40,9 @@
         {% endfor %}
       </ul>
       <div class="card-body">
-        <a href="#" class="card-link">Click</a>
+        <a class="card-link clickup-ajax" id = '{{ post.id }}'>{{post.clicks}} Click</a>
         <a href="#" class="card-link">Comment</a>
-        <a href="#" class="card-link">Tag</a>
+        <a href="#" class="card-link">{{post.tags}} Tag</a>
       </div>
     </div>
     {% endfor %}

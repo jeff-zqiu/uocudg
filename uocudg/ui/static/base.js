@@ -9,12 +9,12 @@ $(document).ready(function() {
     }
   });
 
-  $(".card-body").click(function() {
+  $(".card-body-ajax").click(function() {
     post_url = ["/forum/", $(this).attr('id'), "/"];
     $("#content-overlay").load(post_url.join(''));
   });
 
-  $("#new-post").click(function() {
+  $(".new-post-ajax").click(function() {
     $("#content-overlay").load("/forum/edit/");
   });
 
