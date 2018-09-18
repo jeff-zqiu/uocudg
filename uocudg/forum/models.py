@@ -8,14 +8,14 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     clicked = models.TextField(default='', null=True, blank=True)
 
-    default_user = User.objects.get(pk=2)
+    #default_user = User.objects.get(pk=2)
 
     def is_anon(self):
         return self.user.pk == 2
 
     @classmethod
     def create_user(cls, username, email, password):
-        return cls(User.objects.create_user(username, email, password),'')
+        return cls.objects.create(User.objects.create_user(username, email, password),'')
 
     def __str__(self):
         return self.user.username

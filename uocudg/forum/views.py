@@ -95,33 +95,54 @@ def delete(request, post_id):
         Post.objects.get(pk=post_id).delete()
     return HttpResponseRedirect('/forum/')
 
-def clickup(request, post_id):
-    def check_clicked(post_id, user):
-        clicked_list = user.user.profile.clicked.split()
-        if post_id in clicked_list:
-            clicked_list.remove(post_id)
-            user.clicked = ' '.join(clicked_list)
-            user.save()
+
+class ClickUpView(View):
+    def check_user_clicked(self, post_id, user):
+        clicked_list = user.profile.clicked.split()
+        if str(post_id) in clicked_list:
+            clicked_list.remove(str(post_id))
+            user.profile.clicked = ' '.join(clicked_list)
+            user.profile.save()
             return True
         else:
-            clicked_list.append(post_id)
-            user.clicked = ' '.join(clicked_list)
-            user.save()
+            clicked_list.append(str(post_id))
+            user.profile.clicked = ' '.join(clicked_list)
+            user.profile.save()
             return False
 
-    this_post = Post.objects.get(pk=post_id)
-    warn(type(request.user))
-    if request.user.is_authenticated and not request.user.is_superuser:
-        if check_clicked(post_id, request.user):
-            this_post.clicks-=1
-            this_post.save()
-            return JsonResponse({'clicks' : this_post.clicks, 'clicked' : 'false'})
-        this_post.clicks+=1
-        this_post.save()
-        return JsonResponse({'clicks' : this_post.clicks, 'clicked' : 'true'})
+    def check_anon_clicked(self, post_id, session):
+        try:
+            clicked_list = session['clicked'].split()
+        except KeyError:
+            session['clicked']=''
+            clicked_list = session['clicked'].split()
+        if str(post_id) in clicked_list:
+            clicked_list.remove(str(post_id))
+            session['clicked'] = ' '.join(clicked_list)
+            session.save()
+            return True
+        else:
+            clicked_list.append(str(post_id))
+            session['clicked'] = ' '.join(clicked_list)
+            session.save()
+            return False
 
-    else: return JsonResponse({'clicks' : this_post.clicks, 'clicked' : 'false'})
+    def clickup(self, object, post_id, post, check_method):
+        if check_method(post_id, object):
+            post.clicks-=1
+            post.save()
+            return JsonResponse({'clicks' : post.clicks, 'clicked' : 'false'})
+        else:
+            post.clicks+=1
+            post.save()
+            return JsonResponse({'clicks' : post.clicks, 'clicked' : 'true'})
 
+    def get(self, request, post_id):
+        this_post = Post.objects.get(pk=post_id)
+        user = request.user
+        if request.user.is_authenticated:
+            return self.clickup(user, post_id, this_post, self.check_user_clicked)
+        else: return self.clickup(request.session, post_id, this_post, self.check_anon_clicked)
 
 
 class ContentView(View):
@@ -177,7 +198,7 @@ class SignUpView(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             data = form.cleaned_data
-            User.create_user(
+            Profile.create_user(
                 data['username'],
                 data['email'],
                 data['password']

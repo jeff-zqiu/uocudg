@@ -14,7 +14,7 @@ urlpatterns = [
 
     # /forum/<post_id>/
     path('<int:post_id>/', views.ContentView.as_view() , name='content'),
-    path('<int:post_id>/clickup/', views.clickup, name='clickup'),
+    path('<int:post_id>/clickup/', views.ClickUpView.as_view(), name='clickup'),
 
     # /forum/<post_id>/comment/
     path('<int:post_id>/comment/', views.CommentView.as_view(), name='new_comment'),
