@@ -6,16 +6,18 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    user_pk = models.IntegerField(default=0, editable=False)
     clicked = models.TextField(default='', null=True, blank=True)
 
-    #default_user = User.objects.get(pk=2)
+    default_user = User(username="Anonymous", password="")
 
     def is_anon(self):
         return self.user.pk == 2
 
     @classmethod
     def create_user(cls, username, email, password):
-        return cls.objects.create(User.objects.create_user(username, email, password),'')
+        user = User.objects.create_user(username, email, password)
+        return cls.objects.create(user, user.pk,'')
 
     def __str__(self):
         return self.user.username
@@ -55,7 +57,7 @@ class Comments(models.Model):
     def new_display_name(self, request, data):
         if request.user.is_authenticated and data['display_name']:
             return '#' + str(Comments.objects.last().id + 1) + request.user.username
-        else: return '#'+str(Comments.objects.last().id+1) + ' '+ User.defualt_user.username
+        else: return '#'+str(Comments.objects.last().id+1) + ' '+ Profile.default_user.username
 
     def __str__(self):
         return self.display_name + ' : ' + str(self.content)[:20]

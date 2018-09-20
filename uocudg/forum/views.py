@@ -15,19 +15,34 @@ class View(BaseView):
     def get_user(self, request):
         if request.user.is_authenticated:
             return request.user
-        else: return User.profile.defualt_user
+        else: return Profile.default_user
 
 
 class IndexView(View):
     template_name = "forum/index.html"
+    mode = None
+
+    def get_clicked(self, request, post_id):
+        if request.user.is_authenticated:
+            clicked_list = request.user.profile.clicked.split()
+        else:
+            try:
+                clicked_list = request.session['clicked'].split()
+            except KeyError: return False
+        return str(post_id) in clicked_list
+
 
     def get(self, request):
         user = request.user
-        self.index_post = Post.objects.order_by('-date')[:21]
+        if self.mode is 'top':
+            self.index_post = Post.objects.order_by('-clicks')[:21]
+        else:
+            self.index_post = Post.objects.order_by('-date')[:21]
+
+
         for this_post in self.index_post:
             this_post.comment_snaps = Comments.objects.filter(post=this_post)[:3]
-        # if not user.is_authenticated:
-        #     pass
+            this_post.clicked = self.get_clicked(request, this_post.pk)
         context = {
             'user':user,
             'latest_post_list': self.index_post,
@@ -131,11 +146,11 @@ class ClickUpView(View):
         if check_method(post_id, object):
             post.clicks-=1
             post.save()
-            return JsonResponse({'clicks' : post.clicks, 'clicked' : 'false'})
+            return JsonResponse({'clicks' : post.clicks, 'clicked' : False})
         else:
             post.clicks+=1
             post.save()
-            return JsonResponse({'clicks' : post.clicks, 'clicked' : 'true'})
+            return JsonResponse({'clicks' : post.clicks, 'clicked' : True})
 
     def get(self, request, post_id):
         this_post = Post.objects.get(pk=post_id)

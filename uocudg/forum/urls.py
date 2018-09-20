@@ -6,9 +6,11 @@ urlpatterns = [
 
     # /forum/
     path('', views.IndexView.as_view(), name = 'index'),
+    path('new/', views.IndexView.as_view(), name = 'new'),
+    path('top/', views.IndexView.as_view(mode="top"), name = 'top'),
 
     # /forum/edit/
-    path('edit/', views.EditView.as_view(), name = 'new'),
+    path('edit/', views.EditView.as_view(), name = 'new_post'),
     path('<int:post_id>/edit/', views.EditView.as_view(), name='edit'),
     path('<int:post_id>/edit/delete/', views.delete, name='delete'),
 
