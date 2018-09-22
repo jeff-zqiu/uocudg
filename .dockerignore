@@ -1,6 +1,6 @@
 .DS_Store
 .idea
 __pycache__/
-uocudg/.ipynb_checkpoints/
-uocudg/forum/migrations/__pycache__/
-uocudg/forum/migrations
+.ipynb_checkpoints/
+forum/migrations/__pycache__/
+forum/migrations

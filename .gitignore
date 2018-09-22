@@ -1,9 +1,9 @@
 .DS_Store
 .idea
 __pycache__/
-uocudg/ui/node_modules/
-uocudg/ui/package-lock.json
-uocudg/.ipynb_checkpoints/
-uocudg/forum/migrations/__pycache__/
+ui/node_modules/
+ui/package-lock.json
+.ipynb_checkpoints/
+forum/migrations/__pycache__/
 
 
