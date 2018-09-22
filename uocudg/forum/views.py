@@ -15,7 +15,7 @@ class View(BaseView):
     def get_user(self, request):
         if request.user.is_authenticated:
             return request.user
-        else: return Profile.default_user
+        else: return Profile.default_user()
 
 
 class IndexView(View):

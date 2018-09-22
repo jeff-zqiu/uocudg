@@ -1,0 +1,22 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    #restart: always
+    #environment:
+      #POSTGRES_DB: "uocsecret_db"
+      #POSTGRES_USER: "uocsecret_admin"
+      #POSTGRES_PASSWORD: "uocsecret_password"
+  web:
+    build: .
+    command: bash -c "python uocudg/manage.py createsuperuser &&
+                      python uocudg/manage.py makemigrations &&
+                      python uocudg/manage.py migrate &&
+                      python uocudg/manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/uocudg
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db

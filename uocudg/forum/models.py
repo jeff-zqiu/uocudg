@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 
 
 
@@ -9,18 +10,26 @@ class Profile(models.Model):
     user_pk = models.IntegerField(default=0, editable=False)
     clicked = models.TextField(default='', null=True, blank=True)
 
-    default_user = User(username="Anonymous", password="")
+    @classmethod
+    def default_user(cls):
+        try: anon = User.objects.get(pk=1)
+        except ObjectDoesNotExist:
+            anon = Profile.create_user('Anonymous', '', 'Anonymous')
+        return anon
+
 
     def is_anon(self):
-        return self.user.pk == 2
+        return self.user.pk == 1
 
     @classmethod
     def create_user(cls, username, email, password):
         user = User.objects.create_user(username, email, password)
-        return cls.objects.create(user, user.pk,'')
+        return cls.objects.create(user = user, user_pk = user.pk, clicked ='')
 
     def __str__(self):
         return self.user.username
+
+
 
 
 
@@ -37,7 +46,10 @@ class Post(models.Model):
 
     @classmethod
     def get_next_title(self):
-        return 'Secret #'+str(Post.objects.last().id+1)
+        last_post = Post.objects.last()
+        if last_post:
+            return 'Secret #'+str(last_post.id+1)
+        else: return 'Secret #1'
 
 
 
@@ -55,9 +67,13 @@ class Comments(models.Model):
 
     @classmethod
     def new_display_name(self, request, data):
+        last_comment = Comments.objects.last()
+        if last_comment:
+            last_comment_id = last_comment.id
+        else: last_comment_id = 0
         if request.user.is_authenticated and data['display_name']:
-            return '#' + str(Comments.objects.last().id + 1) + request.user.username
-        else: return '#'+str(Comments.objects.last().id+1) + ' '+ Profile.default_user.username
+            return '#' + str(last_comment_id + 1) + request.user.username
+        else: return '#'+str(last_comment_id + 1) + ' '+ Profile.default_user().username
 
     def __str__(self):
         return self.display_name + ' : ' + str(self.content)[:20]
