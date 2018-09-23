@@ -2,5 +2,5 @@
 .idea
 __pycache__/
 .ipynb_checkpoints/
-forum/migrations/__pycache__/
-forum/migrations
+uocweb/forum/migrations/__pycache__/
+uocweb/forum/migrations
