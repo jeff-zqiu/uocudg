@@ -1,0 +1,88 @@
+// global color scheme
+
+:root {
+  --primary: #70b4db;
+  --info: #263b63;
+  --success: #57b17a;
+  --warning: #d4a042;
+  --danger: #f44336;
+  --light-accent: #8e928b;
+  --dark-accent: #7b7277;
+}
+
+
+
+// index card and up
+
+#content-overlay {
+  top: 10%
+}
+
+.index-card-text {
+  overflow: auto;
+  max-height: 300px;
+}
+
+.index-card {
+  width: 30%;
+  max-width: 400px;
+  min-width: 250px;
+}
+
+
+.block-container {
+  display: block;
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 2;
+}
+
+.content-card {
+  width: 50%;
+  max-height: 80%;
+  top: 10%;
+  overflow: auto;
+  min-width: 300px;
+}
+
+@media screen and (max-width: 768px) {
+  .index-card {width: 40%;}
+  .content-card {width: 80%;}
+}
+
+@media screen and (max-width: 430px) {
+  .index-card {width: 100%;}
+  .content-card {width: 100%;}
+}
+
+
+
+// index card texts
+
+.index-card-title {
+
+}
+
+.index-card-text {
+
+}
+
+.index-card-comment {
+
+}
+
+// index card buttons
+
+.clickup-button-ajax {
+
+}
+
+.clickup-clicked {
+
+}

@@ -1,0 +1,71 @@
+{% load widget_tweaks %}
+
+<div class="block-container d-flex justify-content-center">
+  <div class="card my-2 mx-2 content-card">
+    <div class="card-body">
+      <h5 class="card-title">{{ post.title }}</h5>
+
+      <p class="card-button-right">
+        {% if user.is_superuser %}
+        <a href="{% url 'forum:edit' post.id %}">Edit</a>
+        {% endif %}
+      </p>
+
+      <p class="card-text">{{ post.content }}</p>
+
+
+      <ul class="list-group list-group-flush">
+        {% if list_of_comments %}
+        {% for comment in list_of_comments %}
+        <li class="list-group-item">
+          {{ comment.display_name }} : {{ comment.content }}
+        </li>
+        {% endfor %}
+        {% else %}
+        <p class="card-text">Be the first one to comment!</p>
+        {% endif %}
+      </ul>
+
+
+      <script>
+      $(document).ready(function() {
+        $(".comment-form").submit(function(e) {
+          e.preventDefault();
+          post_url = ["/", $(this).attr('id'), "/"].join('');
+          comment_url = post_url.concat('comment/');
+          $.ajax({
+            url: comment_url,
+            data: {
+              content: $("#contentTextArea").val(),
+              csrfmiddlewaretoken: '{{ csrf_token }}',
+            },
+            type: "POST",
+            success: function(data) {
+             $("#content-overlay").load(post_url);
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+              alert(xhr.status);
+              alert(thrownError);
+            },
+          })
+        });
+      });
+      </script>
+
+      <div class="card-body">
+        <form class="comment-form" id="{{ post.id }}">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="contentTextArea">Comment</label>
+            {% render_field form.content class="form-control" id="contentTextArea" %}
+            {% if user.is_authenticated %}
+            {% render_field form.display_name class="form-check-input" id="displayNameChoice" style="width: auto"%}
+            <label class="form-check-label" for="displayNameChoice">Use username?</label>
+            {% endif %}
+          </div>
+          <button class="btn btn-primary" >Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
