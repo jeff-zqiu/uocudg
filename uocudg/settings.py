@@ -21,11 +21,23 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'b6f&mp-i_=gb$434%g)d+hn1r=&5-1x-^9z7ho@z62zeo$_04t'
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+# Other security settings
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+#X_FRAME_OPTIONS = False
+
+ALLOWED_HOSTS = [
+    '.uocsecret.com',
+    '.uocsecret.com.',
+    '.uocsecret.webfactional.com',
+    '.uocsecret.webfactional.com.'
+]
 
 
 # Application definition
@@ -88,14 +100,11 @@ WSGI_APPLICATION = 'uocudg.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        #'NAME': 'uocsecret_db',
-        'NAME': 'postgres',
-        #'USER': 'uocsecret_admin',
-        'USER': 'postgres',
-        #'PASSWORD': 'uocsecret_password',
-        'PASSWORD': 'postgres',
-        'HOST': 'db',
-        'PORT': '5432',
+        'NAME': 'uocsecret_db',
+        'USER': 'uocsecret_admin',
+        'PASSWORD': 'uocsecret_password',
+        'HOST': '',
+        'PORT': '',
     }
 }
 
@@ -136,7 +145,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
-STATIC_URL = '/ui/static/'
+STATIC_URL = 'http://uocsecret.com/static/'
+STATIC_ROOT = '/home/uocsecret/webapps/uocsecret_static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "ui/static"),
 ]
