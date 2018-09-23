@@ -10,25 +10,11 @@
   --dark-accent: #7b7277;
 }
 
-
-
 // index card and up
 
 #content-overlay {
   top: 10%
 }
-
-.index-card-text {
-  overflow: auto;
-  max-height: 300px;
-}
-
-.index-card {
-  width: 30%;
-  max-width: 400px;
-  min-width: 250px;
-}
-
 
 .block-container {
   display: block;
@@ -61,28 +47,75 @@
   .content-card {width: 100%;}
 }
 
-
-
-// index card texts
-
-.index-card-title {
-
+.index-top-container {
+    margin-bottom: 10px;
 }
 
 .index-card-text {
+  overflow: auto;
+  max-height: 300px;
+}
 
+.index-card {
+  width: 30%;
+  max-width: 400px;
+  min-width: 250px;
+}
+
+.index-card-top {
+  display: inline-block;
+  height: 20px;
+  margin-bottom: 0px;
+}
+
+.index-card-title {
+  min-width: 90px;
+}
+
+.index-card-profile {
+  overflow: hidden;
+  border-radius: 50%;
+}
+
+.index-card-date {
+  font-size: 70%;
+  margin-bottom: 0px;
+  float: right;
+  padding-top: 5px;
+  color: #6E757C;
+}
+
+@media screen and (max-width: 1050px) {
+  .index-card-date {float: left; padding-top: 0px;}
+}
+
+.index-card-text {
+  clear: both;
+}
+
+.card-bot {
+  padding: .8rem 1.25rem;
+}
+
+.card-button-bot {
+  padding: 0px;
+  margin: 0;
+  text-align: center;
+}
+
+.index-card-text {
 }
 
 .index-card-comment {
-
 }
 
-// index card buttons
-
 .clickup-button-ajax {
-
 }
 
 .clickup-clicked {
+    color: red;
+}
 
+.clickup-unclicked {
+  color: #007bff;
 }

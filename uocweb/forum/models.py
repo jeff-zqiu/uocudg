@@ -9,6 +9,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     user_pk = models.IntegerField(default=0, editable=False)
     clicked = models.TextField(default='', null=True, blank=True)
+    profile_pic = models.ImageField()
 
     @classmethod
     def default_user(cls):
@@ -40,6 +41,7 @@ class Post(models.Model):
     content = models.TextField(default="Whoa such empty")
     clicks = models.IntegerField(default=0)
     tags = models.IntegerField(default=0)
+
 
     def __str__(self):
         return self.title
@@ -76,7 +78,10 @@ class Comments(models.Model):
         else: return '#'+str(last_comment_id + 1) + ' '+ Profile.default_user().username
 
     def __str__(self):
-        return self.display_name + ' : ' + str(self.content)[:20]
+        name = self.display_name + ' : ' + str(self.content)[:30]
+        if len(name) >= 29:
+            name += '...'
+        return name
 
 
 

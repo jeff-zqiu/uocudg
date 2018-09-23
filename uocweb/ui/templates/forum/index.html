@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% load static %}
+
 
 <div id="content-overlay"></div>
 <div class="container-fluid">
@@ -10,7 +12,11 @@
     {% for post in latest_post_list %}
     <div class="card my-2 mx-2 grid-item index-card">
       <div class="card-body card-body-ajax" id="{{ post.id }}">
-        <h5 class="card-title index-card-title">{{ post.title }}</h5>
+        <div class="index-top-container">
+          <img class="index-card-top index-card-profile" src="{% static "assets/anon-icon.png" %}"/>
+          <h6 class="index-card-title index-card-top">{{ post.title }}</h6>
+          <p class="index-card-top index-card-date">{{ post.date }}</p>
+        </div>
         <p class="card-text index-card-text">{{ post.content }}</p>
       </div>
       <ul class="list-group list-group-flush">
@@ -18,17 +24,17 @@
         <li class="list-group-item index-card-comment">{{comment_snippet}}</li>
         {% endfor %}
       </ul>
-      <div class="card-body">
+      <div class="card-body card-bot row">
         {% if post.clicked %}
-        <a class="card-link clickup-button-ajax clickup-clicked" id='{{ post.id }}' style="color:red">
-          Click {{post.clicks}}</a>
+        <p class="card-button-bot clickup-button-ajax clickup-clicked col" id='{{ post.id }}'>
+          Click {{post.clicks}}</p>
         {% else %}
-        <a class="card-link clickup-button-ajax clickup-unclicked" id='{{ post.id }}' style="color:#007bff">
+        <p class="card-button-bot clickup-button-ajax clickup-unclicked col" id='{{ post.id }}'>
           Click {{post.clicks}}
-        </a>
+        </p>
         {% endif %}
-        <a class="card-link comment-ajax comment-button">Comment</a>
-        <a class="card-link tag-ajax tag-button">Tag {{post.tags}}</a>
+        <p class="card-button-bot comment-ajax comment-button col" id='{{ post.id }}'>Comment</p>
+        <p class="card-button-bot tag-ajax tag-button col">Tag {{post.tags}}</p>
       </div>
     </div>
     {% endfor %}

@@ -31,7 +31,7 @@ $(document).ready(function() {
         if (data['clicked']) {
           $(selector).css('color', 'red');
         } else {
-          $(selector).css('color', 'blue');
+          $(selector).css('color', '#007bff');
         }
       },
       error: function(xhr, ajaxOptions, thrownError) {
@@ -39,6 +39,13 @@ $(document).ready(function() {
         alert(thrownError);
       },
     })
+  });
+
+  $(".comment-ajax").click(function() {
+    post_url = ["/", $(this).attr('id'), "/"];
+    $("#content-overlay").load(post_url.join(''), function() {
+      $("#contentTextArea").focus();
+    });
   });
 
 });
