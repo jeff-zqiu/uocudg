@@ -1,9 +1,54 @@
 {% load widget_tweaks %}
+{% load static %}
+
+<script>
+$(document).ready(function() {
+  $(".comment-form").submit(function(e) {
+    e.preventDefault();
+    post_url = ["/", $(this).attr('id'), "/"].join('');
+    comment_url = post_url.concat('comment/');
+    $.ajax({
+      url: comment_url,
+      data: {
+        content: $("#contentTextArea").val(),
+        csrfmiddlewaretoken: '{{ csrf_token }}',
+      },
+      type: "POST",
+      success: function(data) {
+       $("#content-overlay").load(post_url);
+      },
+      error: function(xhr, ajaxOptions, thrownError) {
+        alert(xhr.status);
+        alert(thrownError);
+      },
+    })
+  });
+
+  $(".content-card-close-icon").click(function() {
+    $("#content-overlay").html('');
+  });
+
+  // $(".content-card-image").click(function() {
+  //   $(".content-image-overlay").load(
+  //     $(".content-card-image").attr('src'), function(){
+  //       $('*').click(function(){
+  //         $(".content-card-image").html('');
+  //       });
+  //     });
+  // });
+});
+</script>
 
 <div class="block-container d-flex justify-content-center">
   <div class="card content-card">
     <div class="card-body">
-      <h5 class="card-title">{{ post.title }}</h5>
+
+      <div class="index-top-container">
+        <img class="index-card-top index-card-profile" src="{% static "assets/secret-icon-1.png" %}"/>
+        <h6 class="index-card-title index-card-top">{{ post.title }}</h6>
+        <p class="index-card-top index-card-date">{{ post.date }}</p>
+        <img class="content-card-close-icon index-card-top" src="{% static "assets/close-icon.png" %}"/>
+      </div>
 
       <p class="card-button-right">
         {% if user.is_superuser %}
@@ -13,9 +58,11 @@
 
       {% if post.image %}
       <img class="content-card-image" src="{{ post.image.url }}"/>
+      <div class="content-image-overlay"></div>
       {% endif %}
 
-      <p class="card-text">{{ post.content|linebreaks }}</p>
+
+      <p class="card-text index-card-text">{{ post.content|linebreaks }}</p>
 
 
       <ul class="list-group list-group-flush">
@@ -31,30 +78,7 @@
       </ul>
 
 
-      <script>
-      $(document).ready(function() {
-        $(".comment-form").submit(function(e) {
-          e.preventDefault();
-          post_url = ["/", $(this).attr('id'), "/"].join('');
-          comment_url = post_url.concat('comment/');
-          $.ajax({
-            url: comment_url,
-            data: {
-              content: $("#contentTextArea").val(),
-              csrfmiddlewaretoken: '{{ csrf_token }}',
-            },
-            type: "POST",
-            success: function(data) {
-             $("#content-overlay").load(post_url);
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-              alert(xhr.status);
-              alert(thrownError);
-            },
-          })
-        });
-      });
-      </script>
+
 
       <div class="card-body">
         <form class="comment-form" id="{{ post.id }}">

@@ -4,8 +4,9 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from .models import *
 from .form import *
 from django.contrib.auth import views as auth_views
-from warnings import warn
 
+
+from warnings import warn
 
 # TODO: implement password change/reset page
 
@@ -48,7 +49,6 @@ class IndexView(View):
             'latest_post_list': self.index_post,
         }
         return render(request, self.template_name, context)
-
 
 
 class EditView(View):

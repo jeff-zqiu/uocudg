@@ -23,13 +23,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'b6f&mp-i_=gb$434%g)d+hn1r=&5-1x-^9z7ho@z62zeo$_04t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
+PRODUCTION = False
 
 # Other security settings
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+SECURE_CONTENT_TYPE_NOSNIFF = PRODUCTION
+SECURE_BROWSER_XSS_FILTER = PRODUCTION
+SESSION_COOKIE_SECURE = PRODUCTION
+SECURE_SSL_REDIRECT = PRODUCTION
+CSRF_COOKIE_SECURE = PRODUCTION
 #X_FRAME_OPTIONS = False
 
 ALLOWED_HOSTS = [
@@ -88,13 +89,6 @@ WSGI_APPLICATION = 'uocudg.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-#     }
-# }
 
 
 DATABASES = {

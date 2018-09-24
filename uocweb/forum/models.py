@@ -2,6 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.validators import validate_image_file_extension
 
 
 
@@ -40,11 +41,12 @@ class Post(models.Model):
     content = models.TextField(default="Whoa such empty")
     clicks = models.IntegerField(default=0)
     tags = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='post/', null=True, blank=True)
+    image = models.ImageField(upload_to='post/',
+                              validators=[validate_image_file_extension],
+                              null=True, blank=True)
 
     def __str__(self):
         return self.title
-
 
     @classmethod
     def get_next_title(self):
@@ -75,7 +77,7 @@ class Comments(models.Model):
         else: last_comment_id = 0
         if request.user.is_authenticated and data['display_name']:
             return '#' + str(last_comment_id + 1) + request.user.username
-        else: return '#'+str(last_comment_id + 1) + ' '+ Profile.default_user().username
+        else: return '#'+str(last_comment_id + 1) + ' '+ 'User'
 
     def __str__(self):
         name = self.display_name + ' : ' + str(self.content)[:30]

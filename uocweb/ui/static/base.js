@@ -1,4 +1,8 @@
 $(document).ready(function() {
+  $('.grid').masonry({
+    columnWidth: 1,
+    itemSelector: '.grid-item'
+  });
 
   $('*').click(function(e) {
     target = e.target;

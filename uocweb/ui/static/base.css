@@ -34,11 +34,13 @@
 
 .content-card {
   width: 50%;
-  max-height: 80%;
+  height: 80%;
   top: 10%;
   overflow: auto;
   min-width: 300px;
 }
+
+
 
 .index-top-container {
     margin-bottom: 10px;
@@ -53,13 +55,29 @@
   max-height: 400px;
 }
 
-.index-card {
-  width: calc(33% - 18px);
-  max-width: 350px;
-  min-width: 250px;
+.index-card-top {
+  display: inline-block;
+  height: 20px;
+  margin-bottom: 0px;
 }
 
-@media screen and (max-width: 768px) {
+.index-card {
+  width: calc(33% - 18px);
+  max-width: 400px;
+  min-width: 230px;
+}
+
+.content-card-close-icon {
+  display: none;
+  width: 15px;
+  height: 15px;
+  position: relative;
+  left: 95%;
+  bottom: 30px;
+  opacity: 0.4;
+}
+
+@media screen and (max-width: 1024px) {
   .index-container {width: 90%;}
   .index-card {width: calc(50% - 18px);}
   .content-card {width: calc(80% - 4px);}
@@ -68,14 +86,11 @@
 @media screen and (max-width: 430px) {
   .index-container {width: 100%;}
   .index-card {width: calc(100% - 18px);}
-  .content-card {width: 100%; top:5%;}
+  .content-card {width: 100%; top:5%; height: 95%;}
+  .content-card-close-icon {display: block;}
 }
 
-.index-card-top {
-  display: inline-block;
-  height: 20px;
-  margin-bottom: 0px;
-}
+
 
 .index-card-title {
   min-width: 90px;
@@ -84,6 +99,7 @@
 .index-card-profile {
   overflow: hidden;
   border-radius: 50%;
+  opacity: 0.4;
 }
 
 .index-card-date {

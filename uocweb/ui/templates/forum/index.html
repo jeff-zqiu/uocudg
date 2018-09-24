@@ -7,13 +7,13 @@
 <div id="content-overlay"></div>
 <div class="container-fluid index-container">
 
-  <div class="grid" data-masonry='{ "itemSelector": ".grid-item", "columnWidth": 1 }'>
+  <div class="grid">
 
     {% for post in latest_post_list %}
     <div class="card my-2 mx-2 grid-item index-card">
       <div class="card-body card-body-ajax" id="{{ post.id }}">
         <div class="index-top-container">
-          <img class="index-card-top index-card-profile" src="{% static "assets/anon-icon.png" %}"/>
+          <img class="index-card-top index-card-profile" src="{% static "assets/secret-icon-1.png" %}"/>
           <h6 class="index-card-title index-card-top">{{ post.title }}</h6>
           <p class="index-card-top index-card-date">{{ post.date }}</p>
         </div>
@@ -32,10 +32,10 @@
       <div class="card-body card-bot row">
         {% if post.clicked %}
         <p class="card-button-bot clickup-button-ajax clickup-clicked col" id='{{ post.id }}'>
-          Click {{post.clicks}}</p>
+          Upvote {{post.clicks}}</p>
         {% else %}
         <p class="card-button-bot clickup-button-ajax clickup-unclicked col" id='{{ post.id }}'>
-          Click {{post.clicks}}
+          Upvote {{post.clicks}}
         </p>
         {% endif %}
         <p class="card-button-bot comment-ajax comment-button col" id='{{ post.id }}'>Comment</p>
