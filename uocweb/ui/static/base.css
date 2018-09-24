@@ -10,7 +10,10 @@
   --dark-accent: #7b7277;
 }
 
-// index card and up
+.page-container {
+  padding: 0;
+}
+
 
 #content-overlay {
   top: 10%
@@ -37,18 +40,12 @@
   min-width: 300px;
 }
 
-@media screen and (max-width: 768px) {
-  .index-card {width: 40%;}
-  .content-card {width: 80%;}
-}
-
-@media screen and (max-width: 430px) {
-  .index-card {width: 100%;}
-  .content-card {width: 100%;}
-}
-
 .index-top-container {
     margin-bottom: 10px;
+}
+
+.index-container {
+  width: 80%;
 }
 
 .index-card-text {
@@ -57,9 +54,21 @@
 }
 
 .index-card {
-  width: 30%;
-  max-width: 400px;
+  width: calc(33% - 18px);
+  max-width: 350px;
   min-width: 250px;
+}
+
+@media screen and (max-width: 768px) {
+  .index-container {width: 90%;}
+  .index-card {width: calc(50% - 18px);}
+  .content-card {width: calc(80% - 4px);}
+}
+
+@media screen and (max-width: 430px) {
+  .index-container {width: 100%;}
+  .index-card {width: calc(100% - 18px);}
+  .content-card {width: calc(100% - 4px);}
 }
 
 .index-card-top {
@@ -86,6 +95,7 @@
 }
 
 @media screen and (max-width: 1050px) {
+  .index-top-container {max-width: 200px;}
   .index-card-date {float: left; padding-top: 0px;}
 }
 
@@ -107,9 +117,15 @@
 }
 
 .index-card-comment {
+  padding: .4rem 1.25rem;
+  font-size: 80%;
 }
 
 .clickup-button-ajax {
+}
+
+.card-button-bot {
+  color: #007bff;
 }
 
 .clickup-clicked {
@@ -118,4 +134,9 @@
 
 .clickup-unclicked {
   color: #007bff;
+}
+
+
+.comment-form {
+  height: 100px;
 }

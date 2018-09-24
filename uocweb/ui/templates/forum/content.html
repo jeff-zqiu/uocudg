@@ -57,7 +57,7 @@
           {% csrf_token %}
           <div class="form-group">
             <label for="contentTextArea">Comment</label>
-            {% render_field form.content class="form-control" id="contentTextArea" %}
+            {% render_field form.content class="form-control comment-form" id="contentTextArea" %}
             {% if user.is_authenticated %}
             {% render_field form.display_name class="form-check-input" id="displayNameChoice" style="width: auto"%}
             <label class="form-check-label" for="displayNameChoice">Use username?</label>
