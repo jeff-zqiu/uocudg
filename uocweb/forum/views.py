@@ -90,7 +90,7 @@ class EditView(View):
                       })
 
     def post(self, request, post_id=0):
-        form = self.form_class(request.POST)
+        form = self.form_class(request.POST, request.FILES)
         if form.is_valid():
             data = form.cleaned_data
             if post_id:
@@ -101,7 +101,8 @@ class EditView(View):
             else:
                 Post.objects.create(title=self.get_post_title(request, data),
                                     content=data['content'],
-                                    author=self.get_user(request))
+                                    author=self.get_user(request),
+                                    image=request.FILES.get('image', None))
         return HttpResponseRedirect('/')
 
 

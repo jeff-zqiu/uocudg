@@ -17,7 +17,12 @@
           <h6 class="index-card-title index-card-top">{{ post.title }}</h6>
           <p class="index-card-top index-card-date">{{ post.date }}</p>
         </div>
-        <p class="card-text index-card-text">{{ post.content }}</p>
+        <div class="card-text index-card-text">
+        {% if post.image %}
+        <img class="index-card-image" src="{{ post.image.url }}" />
+        {% endif %}
+        {{ post.content|linebreaks }}
+      </div>
       </div>
       <ul class="list-group list-group-flush">
         {% for comment_snippet in post.comment_snaps %}

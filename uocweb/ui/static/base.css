@@ -50,7 +50,7 @@
 
 .index-card-text {
   overflow: auto;
-  max-height: 300px;
+  max-height: 400px;
 }
 
 .index-card {
@@ -99,6 +99,19 @@
   .index-card-date {float: left; padding-top: 0px;}
 }
 
+.index-card-image {
+  width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+}
+
+.content-card-image {
+  max-width: 100%;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  max-height: 400px;
+}
+
 .index-card-text {
   clear: both;
 }
@@ -114,6 +127,7 @@
 }
 
 .index-card-text {
+
 }
 
 .index-card-comment {

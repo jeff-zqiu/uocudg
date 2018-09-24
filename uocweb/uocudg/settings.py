@@ -142,6 +142,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "ui/static"),
 ]
 
+MEDIA_ROOT = '/media/'
+MEDIA_URL = '/media/'
+
 
 
 # login and logout redirection

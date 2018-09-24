@@ -4,6 +4,7 @@ from django.contrib.auth import forms as auth_form
 class PostForm(forms.Form):
     title = forms.CharField(label='Title', max_length=50, required=False)
     content = forms.CharField(label='Content', widget=forms.Textarea)
+    image = forms.ImageField(required=False)
     display_name = forms.BooleanField(required=False)
 
 class CommentForm(forms.Form):
