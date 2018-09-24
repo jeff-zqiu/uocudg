@@ -27,7 +27,7 @@ DEBUG = False
 # Other security settings
 SECURE_CONTENT_TYPE_NOSNIFF = True
 SECURE_BROWSER_XSS_FILTER = True
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 #X_FRAME_OPTIONS = False
@@ -150,6 +150,9 @@ STATIC_ROOT = '/home/uocsecret/webapps/uocsecret_static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "ui/static"),
 ]
+
+MEDIA_URL = 'http://uocsecret.com/media/'
+MEDIA_ROOT = '/home/uocsecret/webapps/uocsecret_media/'
 
 
 
