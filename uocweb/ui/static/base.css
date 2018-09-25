@@ -171,3 +171,8 @@
 .comment-form {
   height: 100px;
 }
+
+.loading-text {
+  margin: auto;
+  text-align: center;
+}

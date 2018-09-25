@@ -1,10 +1,15 @@
 $(document).ready(function() {
   // console.log(($('.page-container').width())/3-18);
-
   var $grid = $('.grid').masonry({
     itemSelector: '.grid-item',
     columnWidth: ($('.page-container').width())/3,
   });
+
+  $(window).on("load", function() {
+    console.log("entire window is loaded!");
+    $('.page-container').masonry('reloadItem');
+  });
+
 
   $(window).scroll(function() {
     if ($(window).scrollTop() + $(window).height() == $(document).height()) {
@@ -22,6 +27,8 @@ $(document).ready(function() {
          var $response = $(response);
          $('.page-container').append($grid.append($response).masonry( 'appended', $response ));
          $('.page-container').attr('id', parseInt(current_page)+1);
+       } else {
+         $('.loading-text').html("No more pages left!");
        }
     }
   });
