@@ -10,9 +10,9 @@ urlpatterns = [
 
     path('about/', TemplateView.as_view(template_name='forum/about.html'),name='about'),
     path('', views.IndexView.as_view(), name = 'index'),
-    #path('new/', views.IndexView.as_view(), name = 'new'),
-    #path('top/', views.IndexView.as_view(mode="top"), name = 'top'),
-    path('page/<int:page>/', views.PageView.as_view(), name = 'page'),
+    path('top/', views.IndexView.as_view(), name = 'top'),
+    path('new/', views.IndexView.as_view(), name = 'new'),
+    path('<str:mode>/<int:page>/', views.PageView.as_view(), name = 'page'),
 
     # /forum/edit/
     path('edit/', views.EditView.as_view(), name = 'new_post'),

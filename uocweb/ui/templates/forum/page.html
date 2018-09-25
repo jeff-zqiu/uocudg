@@ -1,5 +1,12 @@
 {% load static %}
-<!-- <script src="{% static 'base.js'  %}"></script> -->
+<script>
+    function reload_js(src) {
+        $('script[src="' + src + '"]').remove();
+        $('<script>').attr('src', src).appendTo('head');
+    }
+      reload_js("{% static "base.js" %}");
+      // console.log("re-attatched base.js");
+</script>
     {% for post in latest_post_list %}
     <div class="card my-2 mx-2 grid-item index-card">
       <div class="card-body card-body-ajax" id="{{ post.id }}">
@@ -30,7 +37,7 @@
         </p>
         {% endif %}
         <p class="card-button-bot comment-ajax comment-button col" id='{{ post.id }}'>Comment</p>
-        <p class="card-button-bot tag-ajax tag-button col">Tag {{post.tags}}</p>
+        <!-- <p class="card-button-bot tag-ajax tag-button col">Tag {{post.tags}}</p> -->
       </div>
     </div>
     {% endfor %}

@@ -10,6 +10,10 @@
   --dark-accent: #7b7277;
 }
 
+.grand-container {
+  padding: 0;
+}
+
 .page-container {
   padding: 0;
 }

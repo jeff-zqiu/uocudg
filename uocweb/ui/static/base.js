@@ -1,39 +1,44 @@
 $(document).ready(function() {
+  console.log('base.js loaded');
   // console.log(($('.page-container').width())/3-18);
   var $grid = $('.grid').masonry({
     itemSelector: '.grid-item',
     columnWidth: ($('.page-container').width())/3,
   });
 
-  $(window).on("load", function() {
-    console.log("entire window is loaded!");
-    $('.page-container').masonry('reloadItem');
-  });
 
+  // eventBinder: used to prevent duplicated event binding
+  // after ajax load more pages
+  function eventBinder(jqElem, eventStr, handler) {
+    jqElem.off(eventStr);
+    jqElem.on(eventStr, handler);
+  }
 
   $(window).scroll(function() {
     if ($(window).scrollTop() + $(window).height() == $(document).height()) {
       var current_page = $('.page-container').attr('id');
       var response;
       $.ajax({ type: "GET",
-         url: ["/page/", parseInt(current_page)+1, "/"].join(''),
+         url: ["/",$('title').attr('id'),"/", parseInt(current_page)+1, "/"].join(''),
          async: false,
          success : function(text) {
            response= text;
            // console.log("ajax success!");
          }
        });
-       if (response.length>60) {
+       if (response.length>300) {
+         // console.log('response length: ' + response.length + ', is valid');
          var $response = $(response);
          $('.page-container').append($grid.append($response).masonry( 'appended', $response ));
          $('.page-container').attr('id', parseInt(current_page)+1);
        } else {
+         // console.log('response length: ' + response.length + ', is invalid')
          $('.loading-text').html("No more pages left!");
        }
     }
   });
 
-  $('*').click(function(e) {
+  eventBinder($('*'),'click.close-content-overlay',function(e) {
     target = e.target;
     if (!$(target).parents().is(".content-card") &&
       !$(target).is(".content-card") &&
@@ -42,20 +47,21 @@ $(document).ready(function() {
     }
   });
 
-  $(".card-body-ajax").click(function() {
-    post_url = ["/", $(this).attr('id'), "/"];
-    $("#content-overlay").load(post_url.join(''));
+  eventBinder($(".card-body-ajax"),'click.show-content-overlay', function() {
+      post_url = ["/", $(this).attr('id'), "/"];
+      $("#content-overlay").load(post_url.join(''));
   });
 
-  $(".new-post-ajax").click(function() {
+  eventBinder($(".new-post-ajax"),'click.new-post',function() {
     $("#content-overlay").load("/edit/");
   });
 
-  $(".about-ajax").click(function() {
+
+  eventBinder($(".about-ajax"), 'click.about', function() {
     $("#content-overlay").load("/about/");
   });
 
-  $(".clickup-button-ajax").click(function(e) {
+  eventBinder($('.clickup-button-ajax'), 'click.clckup', function(e){
     e.preventDefault();
     post_id = $(this).attr('id');
     click_url = ["/", post_id, "/clickup/"].join('');
@@ -76,9 +82,9 @@ $(document).ready(function() {
         alert(thrownError);
       },
     })
-  });
+  })
 
-  $(".comment-ajax").click(function() {
+  eventBinder($(".comment-ajax"),'click.comment',function() {
     post_url = ["/", $(this).attr('id'), "/"];
     $("#content-overlay").load(post_url.join(''), function() {
       $("#contentTextArea").focus();

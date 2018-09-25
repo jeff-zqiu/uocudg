@@ -1,23 +1,35 @@
 {% load widget_tweaks %}
+{% load static %}
+
+<script>
+$(document).ready(function() {
+  $(".content-card-close-icon").click(function() {
+    $("#content-overlay").html('');
+  });
+});
+</script>
 
 <div class="block-container d-flex justify-content-center">
-  <div class="card my-2 mx-2 content-card" id="content-card-id" style="width: 50%;">
+  <div class="card content-card" id="content-card-id">
     <div class="card-body">
 
-
+<div>
       {% if user.is_superuser %}
       <h5 class="card-title">Edit Post</h5>
       <p><a href="{% url 'forum:delete' post_id %}">Delete</a></p>
       {% else %}
-      <h5 class="card-title">New Post</h5>
+      <h5 class="card-title">Post a secret...</h5>
       {% endif %}
+      <img class="content-card-close-icon" src="{% static "assets/close-icon.png" %}"/>
+    </div>
 
       <div class="card-body">
         <form enctype="multipart/form-data" action="{{ action }}" method="post">
           {% csrf_token %}
           <div class="form-group">
-            <label for="contentTextArea">Content</label>
+            <label for="contentTextArea">Write down your secret...</label>
             {% render_field form.content class="form-control" id="contentTextArea" %}
+            <label for="contentImage">Image (Optional)</label>
             {% render_field form.image class="form-control" id="contentImage" %}
             {% if user.is_authenticated %}
             {% render_field form.display_name class="form-check-input" id="displayNameChoice" style="width: auto"%}
