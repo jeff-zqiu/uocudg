@@ -18,9 +18,13 @@ class View(BaseView):
             return request.user
         else: return Profile.default_user()
 
-
 class IndexView(View):
-    template_name = "forum/index.html"
+    template_name = 'base.html'
+    def get(self, request):
+        return render(request, self.template_name)
+
+class PageView(View):
+    template_name = "forum/page.html"
     mode = None
 
     def get_clicked(self, request, post_id):
@@ -33,13 +37,17 @@ class IndexView(View):
         return str(post_id) in clicked_list
 
 
-    def get(self, request):
+    def get(self, request, page):
         user = request.user
-        if self.mode is 'top':
-            self.index_post = Post.objects.order_by('-clicks')[:21]
-        else:
-            self.index_post = Post.objects.order_by('-date')[:21]
+        post_per_page = 15
+        post_range_start = (page-1)*post_per_page
+        post_range_end = page * post_per_page
+        # if self.mode is 'top':
+        #     self.index_post = Post.objects.order_by('-clicks')[post_range_start:post_range_end]
+        # else:
+        #     self.index_post = Post.objects.order_by('-date')[post_range_start:post_range_end]
 
+        self.index_post = Post.objects.order_by('-date')[post_range_start:post_range_end]
 
         for this_post in self.index_post:
             this_post.comment_snaps = Comments.objects.filter(post=this_post)[:3]

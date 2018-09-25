@@ -1,14 +1,5 @@
-{% extends 'base.html' %}
-{% block content %}
-
 {% load static %}
-
-
-<div id="content-overlay"></div>
-<div class="container-fluid index-container">
-
-  <div class="grid">
-
+<script src="{% static 'base.js'  %}"></script>
     {% for post in latest_post_list %}
     <div class="card my-2 mx-2 grid-item index-card">
       <div class="card-body card-body-ajax" id="{{ post.id }}">
@@ -43,8 +34,3 @@
       </div>
     </div>
     {% endfor %}
-
-  </div>
-</div>
-
-{% endblock %}

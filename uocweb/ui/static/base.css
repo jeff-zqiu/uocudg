@@ -52,7 +52,7 @@
 
 .index-card-text {
   overflow: auto;
-  max-height: 400px;
+  max-height: 500px;
 }
 
 .index-card-top {
@@ -86,6 +86,7 @@
 @media screen and (max-width: 430px) {
   .index-container {width: 100%;}
   .index-card {width: calc(100% - 18px);}
+  .index-card-text {max-height: 400px;}
   .content-card {width: 100%; top:5%; height: 95%;}
   .content-card-close-icon {display: block;}
 }

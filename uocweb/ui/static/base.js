@@ -1,7 +1,29 @@
 $(document).ready(function() {
-  $('.grid').masonry({
-    columnWidth: 1,
-    itemSelector: '.grid-item'
+  // console.log(($('.page-container').width())/3-18);
+
+  var $grid = $('.grid').masonry({
+    itemSelector: '.grid-item',
+    columnWidth: ($('.page-container').width())/3,
+  });
+
+  $(window).scroll(function() {
+    if ($(window).scrollTop() + $(window).height() == $(document).height()) {
+      var current_page = $('.page-container').attr('id');
+      var response;
+      $.ajax({ type: "GET",
+         url: ["/page/", parseInt(current_page)+1, "/"].join(''),
+         async: false,
+         success : function(text) {
+           response= text;
+           // console.log("ajax success!");
+         }
+       });
+       if (response.length>60) {
+         var $response = $(response);
+         $('.page-container').append($grid.append($response).masonry( 'appended', $response ));
+         $('.page-container').attr('id', parseInt(current_page)+1);
+       }
+    }
   });
 
   $('*').click(function(e) {
@@ -22,15 +44,19 @@ $(document).ready(function() {
     $("#content-overlay").load("/edit/");
   });
 
+  $(".about-ajax").click(function() {
+    $("#content-overlay").load("/about/");
+  });
+
   $(".clickup-button-ajax").click(function(e) {
     e.preventDefault();
     post_id = $(this).attr('id');
-    click_url=["/", post_id, "/clickup/"].join('');
-    selector = ['#',post_id,'.clickup-button-ajax'].join('');
+    click_url = ["/", post_id, "/clickup/"].join('');
+    selector = ['#', post_id, '.clickup-button-ajax'].join('');
     $.ajax({
       url: click_url,
       success: function(data) {
-        string = ['Click ', data['clicks']].join('');
+        string = ['Upvote ', data['clicks']].join('');
         $(selector).html(string);
         if (data['clicked']) {
           $(selector).css('color', 'red');

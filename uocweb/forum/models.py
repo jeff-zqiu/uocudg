@@ -75,7 +75,7 @@ class Comments(models.Model):
         if last_comment:
             last_comment_id = last_comment.id
         else: last_comment_id = 0
-        if request.user.is_authenticated and data['display_name']:
+        if request.user.is_authenticated:
             return '#' + str(last_comment_id + 1) + request.user.username
         else: return '#'+str(last_comment_id + 1) + ' '+ 'User'
 
