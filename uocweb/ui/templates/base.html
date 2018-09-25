@@ -24,7 +24,8 @@
       }
       load_url = ['/',$('title').attr('id'),'/1/'].join('');
       $('.page-container').load(load_url, function(){
-        // console.log('first page loaded');
+        console.log('first page loaded');
+        $('.grid-item').masonry('reloadItems');
       });
     });
   </script>

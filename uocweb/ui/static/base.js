@@ -6,7 +6,6 @@ $(document).ready(function() {
     columnWidth: ($('.page-container').width())/3,
   });
 
-
   // eventBinder: used to prevent duplicated event binding
   // after ajax load more pages
   function eventBinder(jqElem, eventStr, handler) {

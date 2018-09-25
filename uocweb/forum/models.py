@@ -3,7 +3,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import validate_image_file_extension
-
+import os
+from uuid import uuid4
 
 
 class Profile(models.Model):
@@ -31,7 +32,14 @@ class Profile(models.Model):
         return self.user.username
 
 
-
+def rand_path_filename(self, instance, original_name):
+    upload_to = 'post/'
+    ext = original_name.split('.')[-1]
+    if instance.pk:
+        filename = '{}.{}'.format(instance.pk, ext)
+    else:
+        filename = '{}.{}'.format(uuid4().hex, ext)
+    return os.path.join(upload_to, filename)
 
 
 class Post(models.Model):
@@ -41,7 +49,7 @@ class Post(models.Model):
     content = models.TextField(default="Whoa such empty")
     clicks = models.IntegerField(default=0)
     tags = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='post/',
+    image = models.ImageField(upload_to=rand_path_filename,
                               validators=[validate_image_file_extension],
                               null=True, blank=True)
 
@@ -54,6 +62,8 @@ class Post(models.Model):
         if last_post:
             return 'Secret #'+str(last_post.id+1)
         else: return 'Secret #1'
+
+
 
 
 
