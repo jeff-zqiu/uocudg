@@ -32,7 +32,7 @@ class Profile(models.Model):
         return self.user.username
 
 
-def rand_path_filename(self, instance, original_name):
+def rand_path_filename(instance, original_name):
     upload_to = 'post/'
     ext = original_name.split('.')[-1]
     if instance.pk:
