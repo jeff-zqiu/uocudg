@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 import os
 import sys
+import time
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'uocudg.settings')
+    time.sleep(5)
+    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'uocsecrets.settings')
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

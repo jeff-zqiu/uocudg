@@ -22,7 +22,7 @@ SECRET_KEY = 'b6f&mp-i_=gb$434%g)d+hn1r=&5-1x-^9z7ho@z62zeo$_04t'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0']
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
@@ -72,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'uocudg.wsgi.application'
+WSGI_APPLICATION = 'uocsecrets.wsgi.application'
 
 
 # Database

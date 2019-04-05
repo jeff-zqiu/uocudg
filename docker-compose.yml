@@ -12,10 +12,10 @@ services:
     build: .
     volumes:
       - .:/uocweb
-    command: bash -c "python uocweb/manage.py makemigrations forum &&
-                      python uocweb/manage.py makemigrations &&
-                      python uocweb/manage.py migrate &&
-                      python uocweb/manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python uocsecrets/manage.py makemigrations forum &&
+                      python uocsecrets/manage.py makemigrations &&
+                      python uocsecrets/manage.py migrate &&
+                      python uocsecrets/manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     depends_on:
